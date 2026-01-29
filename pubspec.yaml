@@ -1,7 +1,6 @@
 name: bingo
 description: "A high-performance, synchronous state storage engine for Flutter with built-in caching and type-safe object registration."
 version: 1.0.0
-
 homepage: https://github.com/RadoDayef/bingo
 repository: https://github.com/RadoDayef/bingo
 
