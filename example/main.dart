@@ -20,7 +20,10 @@ class BingoExampleApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData.dark().copyWith(
         scaffoldBackgroundColor: const Color(0xFF0D1117),
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.cyanAccent, brightness: Brightness.dark),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.cyanAccent,
+          brightness: Brightness.dark,
+        ),
       ),
       home: const BingoDashboard(),
     );
@@ -50,12 +53,16 @@ class _BingoDashboardState extends State<BingoDashboard> {
   dynamic _queryResult;
   String _resultType = "None";
 
-  void _log(String msg) => setState(() => _logs.insert(0, "[${DateTime.now().second}s] $msg"));
+  void _log(String msg) =>
+      setState(() => _logs.insert(0, "[${DateTime.now().second}s] $msg"));
 
   void _fetchData() {
     final key = _queryCtrl.text.trim();
     if (key.isEmpty) {
-      setState(() { _queryResult = null; _resultType = "None"; });
+      setState(() {
+        _queryResult = null;
+        _resultType = "None";
+      });
       return;
     }
 
@@ -77,7 +84,10 @@ class _BingoDashboardState extends State<BingoDashboard> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("B I N G O", style: TextStyle(letterSpacing: 4, fontWeight: FontWeight.bold)),
+        title: const Text(
+          "B I N G O",
+          style: TextStyle(letterSpacing: 4, fontWeight: FontWeight.bold),
+        ),
         elevation: 0,
         centerTitle: true,
         foregroundColor: Colors.cyanAccent,
@@ -93,16 +103,39 @@ class _BingoDashboardState extends State<BingoDashboard> {
             _glassContainer(
               child: Column(
                 children: [
-                  TextField(controller: _uKeyCtrl, decoration: const InputDecoration(labelText: "Storage Key (Unique)", prefixIcon: Icon(Icons.key, size: 18))),
+                  TextField(
+                    controller: _uKeyCtrl,
+                    decoration: const InputDecoration(
+                      labelText: "Storage Key (Unique)",
+                      prefixIcon: Icon(Icons.key, size: 18),
+                    ),
+                  ),
                   const SizedBox(height: 10),
                   Row(
                     children: [
-                      Expanded(child: TextField(controller: _uIdCtrl, decoration: const InputDecoration(labelText: "User ID"))),
+                      Expanded(
+                        child: TextField(
+                          controller: _uIdCtrl,
+                          decoration: const InputDecoration(
+                            labelText: "User ID",
+                          ),
+                        ),
+                      ),
                       const SizedBox(width: 10),
-                      Expanded(child: TextField(controller: _uNameCtrl, decoration: const InputDecoration(labelText: "Name"))),
+                      Expanded(
+                        child: TextField(
+                          controller: _uNameCtrl,
+                          decoration: const InputDecoration(labelText: "Name"),
+                        ),
+                      ),
                     ],
                   ),
-                  TextField(controller: _uEmailCtrl, decoration: const InputDecoration(labelText: "Email Address")),
+                  TextField(
+                    controller: _uEmailCtrl,
+                    decoration: const InputDecoration(
+                      labelText: "Email Address",
+                    ),
+                  ),
                   const SizedBox(height: 20),
                   _neonButton(
                     text: "GENERATE & MARK USER",
@@ -111,10 +144,19 @@ class _BingoDashboardState extends State<BingoDashboard> {
                         _log("⚠️ Error: Storage Key is required.");
                         return;
                       }
-                      final user = User(id: _uIdCtrl.text, name: _uNameCtrl.text, email: _uEmailCtrl.text);
+                      final user = User(
+                        id: _uIdCtrl.text,
+                        name: _uNameCtrl.text,
+                        email: _uEmailCtrl.text,
+                      );
                       Bingo.mark(_uKeyCtrl.text, user);
-                      _log("👤 User '${user.name}' marked at key '${_uKeyCtrl.text}'");
-                      _uKeyCtrl.clear(); _uIdCtrl.clear(); _uNameCtrl.clear(); _uEmailCtrl.clear();
+                      _log(
+                        "👤 User '${user.name}' marked at key '${_uKeyCtrl.text}'",
+                      );
+                      _uKeyCtrl.clear();
+                      _uIdCtrl.clear();
+                      _uNameCtrl.clear();
+                      _uEmailCtrl.clear();
                       setState(() {});
                     },
                   ),
@@ -131,21 +173,39 @@ class _BingoDashboardState extends State<BingoDashboard> {
                   TextField(
                     controller: _queryCtrl,
                     onChanged: (_) => _fetchData(),
-                    decoration: const InputDecoration(labelText: "Enter Key to Fetch", prefixIcon: Icon(Icons.search)),
+                    decoration: const InputDecoration(
+                      labelText: "Enter Key to Fetch",
+                      prefixIcon: Icon(Icons.search),
+                    ),
                   ),
                   const SizedBox(height: 15),
                   Container(
                     width: double.infinity,
                     padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(8)),
+                    decoration: BoxDecoration(
+                      color: Colors.black,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("TYPE: $_resultType", style: const TextStyle(color: Colors.cyanAccent, fontSize: 10)),
+                        Text(
+                          "TYPE: $_resultType",
+                          style: const TextStyle(
+                            color: Colors.cyanAccent,
+                            fontSize: 10,
+                          ),
+                        ),
                         const Divider(color: Colors.white10),
                         Text(
                           _queryResult?.toString() ?? "No record found",
-                          style: TextStyle(fontSize: 13, color: _queryResult == null ? Colors.grey : Colors.white, fontFamily: 'monospace'),
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: _queryResult == null
+                                ? Colors.grey
+                                : Colors.white,
+                            fontFamily: 'monospace',
+                          ),
                         ),
                       ],
                     ),
@@ -162,7 +222,13 @@ class _BingoDashboardState extends State<BingoDashboard> {
                 children: [
                   TextField(
                     controller: _deleteCtrl,
-                    decoration: const InputDecoration(labelText: "Key to Erase", prefixIcon: Icon(Icons.delete_outline, color: Colors.redAccent)),
+                    decoration: const InputDecoration(
+                      labelText: "Key to Erase",
+                      prefixIcon: Icon(
+                        Icons.delete_outline,
+                        color: Colors.redAccent,
+                      ),
+                    ),
                   ),
                   const SizedBox(height: 15),
                   Row(
@@ -207,10 +273,21 @@ class _BingoDashboardState extends State<BingoDashboard> {
               height: 120,
               width: double.infinity,
               padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(10), border: Border.all(color: Colors.white10)),
+              decoration: BoxDecoration(
+                color: Colors.black,
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: Colors.white10),
+              ),
               child: ListView.builder(
                 itemCount: _logs.length,
-                itemBuilder: (context, i) => Text(_logs[i], style: const TextStyle(color: Colors.greenAccent, fontFamily: 'monospace', fontSize: 11)),
+                itemBuilder: (context, i) => Text(
+                  _logs[i],
+                  style: const TextStyle(
+                    color: Colors.greenAccent,
+                    fontFamily: 'monospace',
+                    fontSize: 11,
+                  ),
+                ),
               ),
             ),
           ],
@@ -226,7 +303,15 @@ class _BingoDashboardState extends State<BingoDashboard> {
       alignment: Alignment.centerLeft,
       child: Padding(
         padding: const EdgeInsets.only(bottom: 8, left: 4),
-        child: Text(title, style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.grey, letterSpacing: 1.5)),
+        child: Text(
+          title,
+          style: const TextStyle(
+            fontSize: 10,
+            fontWeight: FontWeight.bold,
+            color: Colors.grey,
+            letterSpacing: 1.5,
+          ),
+        ),
       ),
     );
   }
@@ -236,14 +321,22 @@ class _BingoDashboardState extends State<BingoDashboard> {
       decoration: BoxDecoration(
         border: Border.all(color: Colors.cyanAccent.withAlpha(40)),
         borderRadius: BorderRadius.circular(15),
-        gradient: LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: [Colors.cyan.withAlpha(15), Colors.transparent]),
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [Colors.cyan.withAlpha(15), Colors.transparent],
+        ),
       ),
       padding: const EdgeInsets.all(16),
       child: child,
     );
   }
 
-  Widget _neonButton({required String text, required VoidCallback onTap, Color color = Colors.cyanAccent}) {
+  Widget _neonButton({
+    required String text,
+    required VoidCallback onTap,
+    Color color = Colors.cyanAccent,
+  }) {
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(999),
@@ -253,9 +346,18 @@ class _BingoDashboardState extends State<BingoDashboard> {
         decoration: BoxDecoration(
           border: Border.all(color: color.withAlpha(80)),
           borderRadius: BorderRadius.circular(999),
-          gradient: LinearGradient(colors: [color.withAlpha(60), Colors.transparent]),
+          gradient: LinearGradient(
+            colors: [color.withAlpha(60), Colors.transparent],
+          ),
         ),
-        child: Text(text, style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: color)),
+        child: Text(
+          text,
+          style: TextStyle(
+            fontSize: 11,
+            fontWeight: FontWeight.bold,
+            color: color,
+          ),
+        ),
       ),
     );
   }
@@ -265,7 +367,8 @@ class User {
   final String id, name, email;
   User({required this.id, required this.name, required this.email});
 
-  factory User.fromJson(Map<String, dynamic> json) => User(id: json['id'], name: json['name'], email: json['email']);
+  factory User.fromJson(Map<String, dynamic> json) =>
+      User(id: json['id'], name: json['name'], email: json['email']);
   Map<String, dynamic> toJson() => {'id': id, 'name': name, 'email': email};
 
   @override

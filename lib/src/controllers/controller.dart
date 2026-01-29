@@ -1,12 +1,12 @@
 /// Internal controller for managing Bingo storage operations
-/// 
+///
 /// This controller acts as the intermediary between the public Bingo API
 /// and the internal storage engine. It handles data processing, serialization,
 /// error handling, and logging for all storage operations.
-/// 
+///
 /// **Note:** This is an internal utility class and should not be used
 /// directly by external packages. Use the public Bingo API instead.
-/// 
+///
 /// Example:
 /// ```dart
 /// // Internal use - managed automatically by Bingo static methods
@@ -23,22 +23,22 @@ import 'package:bingo/src/logic/registry.dart';
 import 'package:bingo/src/utils/logger.dart';
 
 /// Internal controller for coordinating Bingo storage operations
-/// 
+///
 /// This class manages the flow of data between the public API and the
 /// storage engine, handling processing, serialization, and error management.
-/// 
+///
 /// **Internal use only.** This class is used internally by Bingo
 /// components and should not be called directly from external code.
 class Controller {
   static final Engine _engine = Engine();
 
   /// Initializes the storage system and database connection
-  /// 
+  ///
   /// Sets up the database engine and loads existing data into cache.
   /// Must be called before any other storage operations.
-  /// 
+  ///
   /// **Internal use only.** Use Bingo.setup() instead of calling this directly.
-  /// 
+  ///
   /// Example:
   /// ```dart
   /// controller.setup();
@@ -47,12 +47,12 @@ class Controller {
   void setup() => _engine.init();
 
   /// Registers a factory function for deserializing custom objects
-  /// 
+  ///
   /// Delegates to the Registry to enable automatic deserialization
   /// of custom object types during retrieval operations.
-  /// 
+  ///
   /// **Internal use only.** Use Bingo.register() instead of calling this directly.
-  /// 
+  ///
   /// Example:
   /// ```dart
   /// controller.register<User>((json) => User.fromJson(json));
@@ -63,12 +63,12 @@ class Controller {
   }
 
   /// Saves a value with the given key, handling serialization and logging
-  /// 
+  ///
   /// Processes the value for JSON compatibility, cleans the data,
   /// saves to both cache and persistent storage, and logs the operation.
-  /// 
+  ///
   /// **Internal use only.** Use Bingo.mark() instead of calling this directly.
-  /// 
+  ///
   /// Example:
   /// ```dart
   /// controller.mark('username', 'john_doe');
@@ -85,12 +85,12 @@ class Controller {
   }
 
   /// Retrieves and deserializes a value by key with type safety
-  /// 
+  ///
   /// Reads from cache, attempts deserialization using registered factories,
   /// and handles both primitive and complex data types with proper error logging.
-  /// 
+  ///
   /// **Internal use only.** Use Bingo.call() instead of calling this directly.
-  /// 
+  ///
   /// Example:
   /// ```dart
   /// final username = controller.call<String>('username');
@@ -118,13 +118,13 @@ class Controller {
   }
 
   /// Updates or saves a value with smart merge logic for maps
-  /// 
+  ///
   /// For map values, performs a shallow merge with existing data.
   /// For other types, replaces the existing value entirely.
   /// Handles processing, cleaning, and appropriate storage operations.
-  /// 
+  ///
   /// **Internal use only.** Use Bingo.remark() instead of calling this directly.
-  /// 
+  ///
   /// Example:
   /// ```dart
   /// controller.remark('settings', {'theme': 'dark'});
@@ -147,12 +147,12 @@ class Controller {
   }
 
   /// Removes a specific key from storage with logging
-  /// 
+  ///
   /// Deletes the key-value pair from both cache and persistent storage
   /// and logs the operation result.
-  /// 
+  ///
   /// **Internal use only.** Use Bingo.erase() instead of calling this directly.
-  /// 
+  ///
   /// Example:
   /// ```dart
   /// controller.erase('temporary_data');
@@ -168,12 +168,12 @@ class Controller {
   }
 
   /// Clears all data from storage with comprehensive logging
-  /// 
+  ///
   /// Removes all data from both cache and persistent storage.
   /// Use with caution as this operation is irreversible.
-  /// 
+  ///
   /// **Internal use only.** Use Bingo.clear() instead of calling this directly.
-  /// 
+  ///
   /// Example:
   /// ```dart
   /// controller.clear();

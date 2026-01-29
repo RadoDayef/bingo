@@ -1,11 +1,11 @@
 <div align="center">
-    <img src="bingo_logo.png" alt="Bingo Logo" width="200"/>
+    <img src="https://github.com/RadoDayef/bingo/blob/master/bingo_logo.png?raw=true" alt="Bingo Logo" width="200"/>
 </div>
 
 ---
 
 [![Repo](https://img.shields.io/badge/repo-bingo-teal?logo=github&logoColor=white)](https://github.com/RadoDayef/bingo)
-[![PubDev](https://img.shields.io/badge/pub.dev-1.0.0-blue?logo=dart&logoColor=white)](https://pub.dev/packages/bingo/install)
+[![PubDev](https://img.shields.io/badge/pub.dev-1.0.1-blue?logo=dart&logoColor=white)](https://pub.dev/packages/bingo/install)
 
 **Bingo** is a high-performance, synchronous state-persistence engine for Flutter. It combines the speed of an in-memory cache with the reliability of a NoSQL database (Sembast).
 
@@ -28,7 +28,7 @@ Add **Bingo** to your `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  bingo: ^1.0.0
+  bingo: ^1.0.1
 
 ```
 
@@ -126,7 +126,7 @@ Bingo.clear();           // Nuke the entire database
 ## 📱 Example Preview
 
 <div align="center">
-    <img src="bingo_example.png" alt="Bingo Example" width="380"/>
+    <img src="https://github.com/RadoDayef/bingo/blob/master/bingo_example.png?raw=true" alt="Bingo Example" width="380"/>
 </div>
 
 ---

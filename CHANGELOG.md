@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.1] - 2026-01-29
+
+### Fixed
+- **Documentation Assets:** Updated README.md to use permanent hosted image URLs for the logo and preview.
+- **Project Metadata:** Refined package description and added repository links for better pub.dev score and discoverability.
+
+---
+
 ## [1.0.0] - 2026-01-29
 
 ### Added
