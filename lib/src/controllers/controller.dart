@@ -44,7 +44,7 @@ class Controller {
   /// controller.setup();
   /// // Storage system is ready for use
   /// ```
-  void setup() => _engine.init();
+  Future<void> setup() async => await _engine.init();
 
   /// Registers a factory function for deserializing custom objects
   ///

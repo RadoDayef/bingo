@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.2] - 2026-06-29
+
+### Changed
+- **Setup:** Updated `setup()` signature from `void` to `Future<void>` for proper async initialization.
+
+---
+
 ## [1.0.1] - 2026-01-29
 
 ### Fixed

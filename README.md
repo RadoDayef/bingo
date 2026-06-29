@@ -5,7 +5,7 @@
 ---
 
 [![Repo](https://img.shields.io/badge/repo-bingo-teal?logo=github&logoColor=white)](https://github.com/RadoDayef/bingo)
-[![PubDev](https://img.shields.io/badge/pub.dev-1.0.1-blue?logo=dart&logoColor=white)](https://pub.dev/packages/bingo/install)
+[![PubDev](https://img.shields.io/badge/pub.dev-1.0.2-blue?logo=dart&logoColor=white)](https://pub.dev/packages/bingo/install)
 
 **Bingo** is a high-performance, synchronous state-persistence engine for Flutter. It combines the speed of an in-memory cache with the reliability of a NoSQL database (Sembast).
 
@@ -28,7 +28,7 @@ Add **Bingo** to your `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  bingo: ^1.0.1
+  bingo: ^1.0.2
 
 ```
 

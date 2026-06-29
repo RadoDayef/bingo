@@ -43,7 +43,7 @@ class Bingo {
   /// ```dart
   /// Bingo.setup();
   /// ```
-  static void setup() => _controller.setup();
+  static Future<void> setup() async => await _controller.setup();
 
   /// Registers a factory function for deserializing objects of type T
   ///
