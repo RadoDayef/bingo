@@ -9,7 +9,7 @@
 ///
 /// Example:
 /// ```dart
-/// // Internal use - processed automatically by Bingo.mark() and Bingo.remark()
+/// // Internal use - processed automatically by Bingo.mark()
 /// final processed = Handler.process(complexObject);
 /// ```
 library;

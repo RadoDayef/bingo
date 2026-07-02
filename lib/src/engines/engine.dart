@@ -72,6 +72,22 @@ class Engine {
     return _cache[key];
   }
 
+  /// Checks whether a key exists in the in-memory cache
+  ///
+  /// Returns true if the given key is present in the cache, false otherwise.
+  /// This operation is very fast as it only accesses memory.
+  ///
+  /// **Internal use only.** Use Bingo's String extension `.isMarked` instead.
+  ///
+  /// Example:
+  /// ```dart
+  /// final exists = engine.contains('user_name');
+  /// // Returns: true or false
+  /// ```
+  bool contains(String key) {
+    return _cache.containsKey(key);
+  }
+
   /// Saves a value to both cache and persistent storage
   ///
   /// Stores the value in both the in-memory cache and the persistent
@@ -94,7 +110,7 @@ class Engine {
   /// If the existing value is a Map, performs a shallow merge with the partial data.
   /// If no existing value or not a Map, saves the partial data as a new Map.
   ///
-  /// **Internal use only.** Use Bingo.remark() instead of calling this directly.
+  /// **Internal use only.** Use Bingo.mark() instead of calling this directly.
   ///
   /// Example:
   /// ```dart

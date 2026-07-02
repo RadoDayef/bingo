@@ -3,7 +3,7 @@ import 'package:bingo/bingo.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Bingo.setup();
+  await Bingo.setup();
 
   // Mapping the User factory for Bingo's deep casting logic
   Bingo.register<User>((json) => User.fromJson(json));
@@ -66,13 +66,8 @@ class _BingoDashboardState extends State<BingoDashboard> {
       return;
     }
 
-    // Attempting to call as User first, fallback to dynamic
-    dynamic result;
-    try {
-      result = Bingo.call<User>(key);
-    } catch (_) {
-      result = Bingo.call<dynamic>(key);
-    }
+    // Try User first, fallback to dynamic if null
+    final result = Bingo.call<User>(key) ?? Bingo.call<dynamic>(key);
 
     setState(() {
       _queryResult = result;
@@ -165,7 +160,58 @@ class _BingoDashboardState extends State<BingoDashboard> {
             ),
             const SizedBox(height: 25),
 
-            // 2. RETRIEVAL MODULE
+            // 2. SETTINGS DEMO (Merge behavior)
+            _sectionHeader("SETTINGS DEMO"),
+            _glassContainer(
+              child: Column(
+                children: [
+                  const Text(
+                    "Bingo.mark auto-merges Maps by default.",
+                    style: TextStyle(fontSize: 11, color: Colors.grey),
+                  ),
+                  const SizedBox(height: 12),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: _neonButton(
+                          text: "SAVE SETTINGS",
+                          onTap: () {
+                            Bingo.mark('settings', {'theme': 'light'});
+                            _log("⚙️ Settings saved (theme: light)");
+                            setState(() {});
+                          },
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: _neonButton(
+                          text: "MERGE LANG",
+                          color: Colors.amber,
+                          onTap: () {
+                            Bingo.mark('settings', {'lang': 'en'});
+                            _log("🔀 Merged lang: en (theme kept)");
+                            setState(() {});
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  _neonButton(
+                    text: "OVERWRITE (MERGE: FALSE)",
+                    color: Colors.purpleAccent,
+                    onTap: () {
+                      Bingo.mark('settings', {'theme': 'dark'}, merge: false);
+                      _log("💜 Settings overwritten (lang lost)");
+                      setState(() {});
+                    },
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 25),
+
+            // 3. RETRIEVAL MODULE
             _sectionHeader("USER DATA RETRIEVAL"),
             _glassContainer(
               child: Column(
@@ -205,6 +251,16 @@ class _BingoDashboardState extends State<BingoDashboard> {
                                 ? Colors.grey
                                 : Colors.white,
                             fontFamily: 'monospace',
+                          ),
+                        ),
+                        const SizedBox(height: 6),
+                        Text(
+                          "EXISTS: ${_queryCtrl.text.trim().isMarked}",
+                          style: TextStyle(
+                            fontSize: 10,
+                            color: _queryCtrl.text.trim().isMarked
+                                ? Colors.greenAccent
+                                : Colors.redAccent,
                           ),
                         ),
                       ],

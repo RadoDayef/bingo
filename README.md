@@ -5,7 +5,7 @@
 ---
 
 [![Repo](https://img.shields.io/badge/repo-bingo-teal?logo=github&logoColor=white)](https://github.com/RadoDayef/bingo)
-[![PubDev](https://img.shields.io/badge/pub.dev-1.0.2-blue?logo=dart&logoColor=white)](https://pub.dev/packages/bingo/install)
+[![PubDev](https://img.shields.io/badge/pub.dev-1.1.0-blue?logo=dart&logoColor=white)](https://pub.dev/packages/bingo/install)
 
 **Bingo** is a high-performance, synchronous state-persistence engine for Flutter. It combines the speed of an in-memory cache with the reliability of a NoSQL database (Sembast).
 
@@ -16,7 +16,7 @@ Unlike other storage solutions, Bingo allows you to **retrieve complex objects s
 * **⚡ Zero-Latency Retrieval:** Access data synchronously from an optimized in-memory cache.
 * **👤 Type-Safe Custom Objects:** Register factories to automatically turn JSON back into real Dart classes.
 * **📋 Collection Support:** Seamlessly store and retrieve `List<T>` of custom objects.
-* **🔄 Smart Merge:** Use `remark` to surgically update specific fields in a Map without overwriting the whole object.
+* **🔄 Smart Merge:** `Bingo.mark` auto-merges Maps by default — update specific fields without losing the rest.
 * **🛡️ Pure Data:** Automatic "deep cleaning" through JSON serialization to ensure database integrity.
 * **🚨 Debug Logger:** Built-in emoji logging to track your data flow during development.
 
@@ -28,7 +28,7 @@ Add **Bingo** to your `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  bingo: ^1.0.2
+  bingo: ^1.1.0
 
 ```
 
@@ -59,7 +59,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Initialize the engine & load cache
-  Bingo.setup();
+  await Bingo.setup();
 
   runApp(MyApp());
 }
@@ -103,16 +103,39 @@ User? cachedUser = Bingo.call<User>('current_user');
 print(cachedUser?.name); // Mourad
 ```
 
-### Surgical Updates (`remark`)
+### Smart Merge (Auto-Merge Maps)
 
-Updating a single field in a complex map without re-saving the entire object:
+By default, `Bingo.mark` performs a shallow merge when the value is a Map. Add new fields without losing existing data:
 
 ```dart
 // Existing settings: {'theme': 'dark', 'notifications': true}
-Bingo.remark('settings', {'theme': 'light'});
+Bingo.mark('settings', {'theme': 'light'});
 
-// New settings: {'theme': 'light', 'notifications': true}
+// Result: {'theme': 'light', 'notifications': true}
 ```
+
+Pass `merge: false` to overwrite instead:
+
+```dart
+Bingo.mark('settings', {'theme': 'light'}, merge: false);
+
+// Result: {'theme': 'light'} — previous data is lost
+```
+
+Primitives and Lists always overwrite regardless of the `merge` parameter.
+
+### Key Existence Check (`.isMarked`)
+
+Check if a key exists without retrieving its value:
+
+```dart
+if ('username'.isMarked) {
+  // Key exists — safe to call
+  final name = Bingo.call<String>('username');
+}
+```
+
+The `.isMarked` extension is available on any `String` after importing Bingo.
 
 ### Deletion & Cleanup
 

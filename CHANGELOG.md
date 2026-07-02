@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.0] - 2026-07-02
+
+### Added
+- **Key Existence Check:** Added `.isMarked` extension on `String` for checking key presence without retrieval (`'key'.isMarked`).
+- **Merge Control:** Added `merge` parameter to `Bingo.mark()` — defaults to `true` (auto-merge Maps), pass `false` to overwrite.
+
+### Changed
+- **Unified Write API:** Removed public `remark()` method. `Bingo.mark()` now auto-merges Maps by default — no need to choose between `mark` and `remark`.
+- **Example App:** Updated with SETTINGS DEMO section showing merge vs overwrite behavior, `.isMarked` indicator, and cleaned up retrieval logic.
+
+### Removed
+- **`Bingo.remark()`** — replaced by `Bingo.mark(key, value)` (default merge) and `Bingo.mark(key, value, merge: false)` (overwrite).
+
+---
+
 ## [1.0.2] - 2026-06-29
 
 ### Changed

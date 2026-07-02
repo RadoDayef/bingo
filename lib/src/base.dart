@@ -54,8 +54,7 @@ class Bingo {
   /// ```dart
   /// Bingo.register<User>((json) => User.fromJson(json));
   /// ```
-  static void register<T>(T Function(Map<String, dynamic>) factory) =>
-      Registry.register<T>(factory);
+  static void register<T>(T Function(Map<String, dynamic>) factory) => Registry.register<T>(factory);
 
   /// Saves a value with the given key, handling serialization of complex objects
   ///
@@ -68,7 +67,7 @@ class Bingo {
   /// Bingo.mark('settings', {'theme': 'dark', 'notifications': true});
   /// Bingo.mark('users', [User('John'), User('Jane')]);
   /// ```
-  static void mark(String key, dynamic value) => _controller.mark(key, value);
+  static void mark(String key, dynamic value, {bool merge = true}) => _controller.mark(key, value, merge: merge);
 
   /// Retrieves and deserializes a value by key, returning null if not found
   ///
@@ -82,19 +81,6 @@ class Bingo {
   /// final users = Bingo.call<List<User>>('users');
   /// ```
   static T? call<T>(String key) => _controller.call<T>(key);
-
-  /// Updates or saves a value, using update for maps and save for other types
-  ///
-  /// For map values, performs a shallow merge with existing data.
-  /// For other types, replaces the existing value entirely.
-  ///
-  /// Example:
-  /// ```dart
-  /// Bingo.remark('settings', {'theme': 'light'}); // Merges with existing settings
-  /// Bingo.remark('counter', 42); // Replaces existing counter
-  /// ```
-  static void remark(String key, dynamic value) =>
-      _controller.remark(key, value);
 
   /// Removes a specific key from the database
   ///
@@ -116,4 +102,28 @@ class Bingo {
   /// Bingo.clear(); // Clears all data
   /// ```
   static void clear() => _controller.clear();
+}
+
+/// Extension on [String] for convenient key existence checks
+///
+/// Provides a more natural syntax for checking if a key exists
+/// in the Bingo storage system without calling the static API.
+///
+/// Example:
+/// ```dart
+/// final exists = 'username'.isMarked;
+/// ```
+extension BingoStringExtension on String {
+  /// Checks if this key exists in the Bingo database
+  ///
+  /// Returns true if the key exists in the cache, false otherwise.
+  /// Provides a clean, readable syntax for key existence checks.
+  ///
+  /// Example:
+  /// ```dart
+  /// if ('user_prefs'.isMarked) {
+  ///   final data = Bingo.call<Map>('user_prefs');
+  /// }
+  /// ```
+  bool get isMarked => Bingo._controller.isMarked(this);
 }

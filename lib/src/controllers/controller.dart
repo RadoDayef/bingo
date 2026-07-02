@@ -66,6 +66,8 @@ class Controller {
   ///
   /// Processes the value for JSON compatibility, cleans the data,
   /// saves to both cache and persistent storage, and logs the operation.
+  /// When [merge] is true and the value is a Map, performs a shallow merge
+  /// with any existing data instead of replacing it entirely.
   ///
   /// **Internal use only.** Use Bingo.mark() instead of calling this directly.
   ///
@@ -74,10 +76,16 @@ class Controller {
   /// controller.mark('username', 'john_doe');
   /// // Value is saved and success is logged
   /// ```
-  void mark(String key, dynamic value) {
+  void mark(String key, dynamic value, {bool merge = true}) {
     try {
       final processed = Handler.process(value);
-      _engine.save(key, Converter.clean(processed));
+      final cleanData = Converter.clean(processed);
+
+      if (merge && cleanData is Map<String, dynamic> && value is! List) {
+        _engine.update(key, cleanData);
+      } else {
+        _engine.save(key, cleanData);
+      }
       Logger.successDebugLog("Data marked successfully with key: $key");
     } catch (error) {
       Logger.failureDebugLog("Failed to mark $key. $error");
@@ -117,32 +125,24 @@ class Controller {
     }
   }
 
-  /// Updates or saves a value with smart merge logic for maps
+  /// Checks if a specific key exists in storage with logging
   ///
-  /// For map values, performs a shallow merge with existing data.
-  /// For other types, replaces the existing value entirely.
-  /// Handles processing, cleaning, and appropriate storage operations.
+  /// Returns true if the key exists in the cache, false otherwise.
+  /// Useful for checking key presence without retrieving the full value.
   ///
-  /// **Internal use only.** Use Bingo.remark() instead of calling this directly.
+  /// **Internal use only.** Use the String extension `.isMarked` instead.
   ///
   /// Example:
   /// ```dart
-  /// controller.remark('settings', {'theme': 'dark'});
-  /// // Merges with existing settings or creates new
+  /// final isMarked = controller.isMarked('user_name');
+  /// // Returns: true or false
   /// ```
-  void remark(String key, dynamic value) {
+  bool isMarked(String key) {
     try {
-      final processed = Handler.process(value);
-      final cleanData = Converter.clean(processed);
-
-      if (cleanData is Map<String, dynamic> && value is! List) {
-        _engine.update(key, cleanData);
-      } else {
-        _engine.save(key, cleanData);
-      }
-      Logger.successDebugLog("Data remarked successfully with key: $key");
+      return _engine.contains(key);
     } catch (error) {
-      Logger.failureDebugLog("Failed to remark $key. $error");
+      Logger.failureDebugLog("Failed to check key '$key'. $error");
+      return false;
     }
   }
 
