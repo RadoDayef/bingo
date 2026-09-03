@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.1] - 2026-09-03
+
+### Fixed
+- **Web Support:** `Bingo.setup()` no longer throws `MissingPluginException` on Flutter web. Web builds run with in-memory cache only (no persistence), while iOS/Android/desktop behavior is unchanged.
+
+---
+
 ## [1.1.0] - 2026-07-02
 
 ### Added

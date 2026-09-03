@@ -16,6 +16,7 @@
 /// ```
 library;
 
+import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sembast/sembast_io.dart';
 
@@ -46,6 +47,7 @@ class Engine {
   /// // Database is ready and cache is populated
   /// ```
   Future<void> init() async {
+    if (kIsWeb) return; // no native path_provider on web
     final dir = await getApplicationDocumentsDirectory();
     final dbPath = '${dir.path}/bingo.db';
     _db = await databaseFactoryIo.openDatabase(dbPath);
@@ -102,7 +104,8 @@ class Engine {
   /// ```
   void save(String key, dynamic value) {
     _cache[key] = value;
-    _store.record(key).put(_db!, value);
+    final db = _db;
+    if (db != null) _store.record(key).put(db, value);
   }
 
   /// Updates an existing map value by merging partial data, or saves as new map if not exists
@@ -122,7 +125,8 @@ class Engine {
     if (existing is Map) {
       final Map<String, dynamic> updatedMap = {...existing, ...partialData};
       _cache[key] = updatedMap;
-      _store.record(key).put(_db!, updatedMap);
+      final db = _db;
+      if (db != null) _store.record(key).put(db, updatedMap);
     } else {
       save(key, partialData);
     }
@@ -142,7 +146,8 @@ class Engine {
   /// ```
   void delete(String key) {
     _cache.remove(key);
-    _store.record(key).delete(_db!);
+    final db = _db;
+    if (db != null) _store.record(key).delete(db);
   }
 
   /// Clears all values from both cache and persistent storage
@@ -159,6 +164,7 @@ class Engine {
   /// ```
   void clearAll() {
     _cache.clear();
-    _store.delete(_db!);
+    final db = _db;
+    if (db != null) _store.delete(db);
   }
 }
