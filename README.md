@@ -5,7 +5,7 @@
 ---
 
 [![Repo](https://img.shields.io/badge/repo-bingo-teal?logo=github&logoColor=white)](https://github.com/RadoDayef/bingo)
-[![PubDev](https://img.shields.io/badge/pub.dev-1.1.1-blue?logo=dart&logoColor=white)](https://pub.dev/packages/bingo/install)
+[![PubDev](https://img.shields.io/badge/pub.dev-1.2.0-blue?logo=dart&logoColor=white)](https://pub.dev/packages/bingo/install)
 
 **Bingo** is a high-performance, synchronous state-persistence engine for Flutter. It combines the speed of an in-memory cache with the reliability of a NoSQL database (Sembast).
 
@@ -19,6 +19,7 @@ Unlike other storage solutions, Bingo allows you to **retrieve complex objects s
 * **🔄 Smart Merge:** `Bingo.mark` auto-merges Maps by default — update specific fields without losing the rest.
 * **🛡️ Pure Data:** Automatic "deep cleaning" through JSON serialization to ensure database integrity.
 * **🚨 Debug Logger:** Built-in emoji logging to track your data flow during development.
+* **🌐 Full Platform Support:** Native persistence on iOS/Android/desktop **and** real browser storage (IndexedDB) on Flutter web — data survives page reloads.
 
 ---
 
@@ -28,7 +29,7 @@ Add **Bingo** to your `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  bingo: ^1.1.1
+  bingo: ^1.2.0
 
 ```
 
@@ -81,8 +82,8 @@ Bingo.register<User>((json) => User.fromJson(json));
 
 ```dart
 // Saving
-Bingo.mark('username', 'neon_developer');
-Bingo.mark('is_pro', true);
+await Bingo.mark('username', 'neon_developer');
+await Bingo.mark('is_pro', true);
 
 // Retrieving (Synchronous!)
 String name = Bingo.call<String>('username') ?? 'Guest';
@@ -96,7 +97,7 @@ Bingo automatically looks for a `toJson()` or `toMap()` method to save your obje
 final user = User(id: '1', name: 'Mourad');
 
 // Save the object
-Bingo.mark('current_user', user);
+await Bingo.mark('current_user', user);
 
 // Retrieve it as a real User class instantly
 User? cachedUser = Bingo.call<User>('current_user');
@@ -109,7 +110,7 @@ By default, `Bingo.mark` performs a shallow merge when the value is a Map. Add n
 
 ```dart
 // Existing settings: {'theme': 'dark', 'notifications': true}
-Bingo.mark('settings', {'theme': 'light'});
+await Bingo.mark('settings', {'theme': 'light'});
 
 // Result: {'theme': 'light', 'notifications': true}
 ```
@@ -117,7 +118,7 @@ Bingo.mark('settings', {'theme': 'light'});
 Pass `merge: false` to overwrite instead:
 
 ```dart
-Bingo.mark('settings', {'theme': 'light'}, merge: false);
+await Bingo.mark('settings', {'theme': 'light'}, merge: false);
 
 // Result: {'theme': 'light'} — previous data is lost
 ```
@@ -140,8 +141,8 @@ The `.isMarked` extension is available on any `String` after importing Bingo.
 ### Deletion & Cleanup
 
 ```dart
-Bingo.erase('temp_key'); // Delete one key
-Bingo.clear();           // Nuke the entire database
+await Bingo.erase('temp_key'); // Delete one key
+await Bingo.clear();            // Nuke the entire database
 ```
 
 ---

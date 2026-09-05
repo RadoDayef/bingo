@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.0] - 2026-09-05
+
+### Added
+- **Real Web Persistence:** Web builds now persist data to browser storage via `sembast_web` (IndexedDB) instead of using an in-memory-only cache. Data survives page reloads.
+
+### Changed
+- **Async Write API:** `Bingo.mark()`, `Bingo.erase()`, and `Bingo.clear()` are now `Future<void>` and should be `await`ed to ensure writes complete before proceeding.
+
+---
+
 ## [1.1.1] - 2026-09-03
 
 ### Fixed

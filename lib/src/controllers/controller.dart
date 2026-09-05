@@ -11,8 +11,8 @@
 /// ```dart
 /// // Internal use - managed automatically by Bingo static methods
 /// final controller = Controller();
-/// controller.setup();
-/// controller.mark('key', 'value');
+/// await controller.setup();
+/// await controller.mark('key', 'value');
 /// ```
 library;
 
@@ -41,7 +41,7 @@ class Controller {
   ///
   /// Example:
   /// ```dart
-  /// controller.setup();
+  /// await controller.setup();
   /// // Storage system is ready for use
   /// ```
   Future<void> setup() async => await _engine.init();
@@ -73,18 +73,18 @@ class Controller {
   ///
   /// Example:
   /// ```dart
-  /// controller.mark('username', 'john_doe');
+  /// await controller.mark('username', 'john_doe');
   /// // Value is saved and success is logged
   /// ```
-  void mark(String key, dynamic value, {bool merge = true}) {
+  Future<void> mark(String key, dynamic value, {bool merge = true}) async {
     try {
       final processed = Handler.process(value);
       final cleanData = Converter.clean(processed);
 
       if (merge && cleanData is Map<String, dynamic> && value is! List) {
-        _engine.update(key, cleanData);
+        await _engine.update(key, cleanData);
       } else {
-        _engine.save(key, cleanData);
+        await _engine.save(key, cleanData);
       }
       Logger.successDebugLog("Data marked successfully with key: $key");
     } catch (error) {
@@ -155,12 +155,12 @@ class Controller {
   ///
   /// Example:
   /// ```dart
-  /// controller.erase('temporary_data');
+  /// await controller.erase('temporary_data');
   /// // Key is removed and success is logged
   /// ```
-  void erase(String key) {
+  Future<void> erase(String key) async {
     try {
-      _engine.delete(key);
+      await _engine.delete(key);
       Logger.successDebugLog("Data erased successfully with key: $key.");
     } catch (error) {
       Logger.failureDebugLog("Failed to erase $key. $error");
@@ -176,12 +176,12 @@ class Controller {
   ///
   /// Example:
   /// ```dart
-  /// controller.clear();
+  /// await controller.clear();
   /// // All data is removed and success is logged
   /// ```
-  void clear() {
+  Future<void> clear() async {
     try {
-      _engine.clearAll();
+      await _engine.clearAll();
       Logger.successDebugLog("All data cleared successfully from storage.");
     } catch (error) {
       Logger.failureDebugLog("Failed to clear database. $error");

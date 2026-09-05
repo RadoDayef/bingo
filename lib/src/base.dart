@@ -15,7 +15,7 @@
 /// await Bingo.setup();
 ///
 /// // Save data
-/// Bingo.mark('user', {'name': 'John', 'age': 30});
+/// await Bingo.mark('user', {'name': 'John', 'age': 30});
 ///
 /// // Retrieve data
 /// final user = Bingo.call<Map<String, dynamic>>('user');
@@ -41,7 +41,7 @@ class Bingo {
   ///
   /// Example:
   /// ```dart
-  /// Bingo.setup();
+  /// await Bingo.setup();
   /// ```
   static Future<void> setup() async => await _controller.setup();
 
@@ -63,11 +63,12 @@ class Bingo {
   ///
   /// Example:
   /// ```dart
-  /// Bingo.mark('username', 'john_doe');
-  /// Bingo.mark('settings', {'theme': 'dark', 'notifications': true});
-  /// Bingo.mark('users', [User('John'), User('Jane')]);
+  /// await Bingo.mark('username', 'john_doe');
+  /// await Bingo.mark('settings', {'theme': 'dark', 'notifications': true});
+  /// await Bingo.mark('users', [User('John'), User('Jane')]);
   /// ```
-  static void mark(String key, dynamic value, {bool merge = true}) => _controller.mark(key, value, merge: merge);
+  static Future<void> mark(String key, dynamic value, {bool merge = true}) async =>
+      await _controller.mark(key, value, merge: merge);
 
   /// Retrieves and deserializes a value by key, returning null if not found
   ///
@@ -88,9 +89,9 @@ class Bingo {
   ///
   /// Example:
   /// ```dart
-  /// Bingo.erase('key');
+  /// await Bingo.erase('key');
   /// ```
-  static void erase(String key) => _controller.erase(key);
+  static Future<void> erase(String key) async => await _controller.erase(key);
 
   /// Wipes every single piece of data in the Bingo DB
   ///
@@ -99,9 +100,9 @@ class Bingo {
   ///
   /// Example:
   /// ```dart
-  /// Bingo.clear(); // Clears all data
+  /// await Bingo.clear(); // Clears all data
   /// ```
-  static void clear() => _controller.clear();
+  static Future<void> clear() async => await _controller.clear();
 }
 
 /// Extension on [String] for convenient key existence checks

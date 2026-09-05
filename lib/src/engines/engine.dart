@@ -12,13 +12,14 @@
 /// // Internal use - managed automatically by Bingo.setup()
 /// final engine = Engine();
 /// await engine.init();
-/// engine.save('key', 'value');
+/// await engine.save('key', 'value');
 /// ```
 library;
 
 import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sembast/sembast_io.dart';
+import 'package:sembast_web/sembast_web.dart';
 
 /// Internal database engine for Bingo storage operations
 ///
@@ -35,8 +36,10 @@ class Engine {
 
   /// Initializes the database and loads all existing records into memory cache
   ///
-  /// Creates the database file in the application documents directory
-  /// and loads all existing records into the in-memory cache for fast access.
+  /// Opens the Sembast database on the current platform — a file in the
+  /// application documents directory on native platforms (iOS/Android/desktop),
+  /// or browser storage (IndexedDB) on Flutter web — and loads all existing
+  /// records into the in-memory cache for fast access.
   /// Must be called before any other operations.
   ///
   /// **Internal use only.** Use Bingo.setup() instead of calling this directly.
@@ -47,10 +50,13 @@ class Engine {
   /// // Database is ready and cache is populated
   /// ```
   Future<void> init() async {
-    if (kIsWeb) return; // no native path_provider on web
-    final dir = await getApplicationDocumentsDirectory();
-    final dbPath = '${dir.path}/bingo.db';
-    _db = await databaseFactoryIo.openDatabase(dbPath);
+    if (kIsWeb) {
+      _db = await databaseFactoryWeb.openDatabase('bingo.db');
+    } else {
+      final dir = await getApplicationDocumentsDirectory();
+      final dbPath = '${dir.path}/bingo.db';
+      _db = await databaseFactoryIo.openDatabase(dbPath);
+    }
 
     final records = await _store.find(_db!);
     for (var record in records) {
@@ -99,13 +105,13 @@ class Engine {
   ///
   /// Example:
   /// ```dart
-  /// engine.save('user_name', 'John');
+  /// await engine.save('user_name', 'John');
   /// // Value is now in both cache and database
   /// ```
-  void save(String key, dynamic value) {
+  Future<void> save(String key, dynamic value) async {
     _cache[key] = value;
     final db = _db;
-    if (db != null) _store.record(key).put(db, value);
+    if (db != null) await _store.record(key).put(db, value);
   }
 
   /// Updates an existing map value by merging partial data, or saves as new map if not exists
@@ -117,18 +123,18 @@ class Engine {
   ///
   /// Example:
   /// ```dart
-  /// engine.update('user', {'age': 25});
+  /// await engine.update('user', {'age': 25});
   /// // Merges with existing user data or creates new user map
   /// ```
-  void update(String key, Map<String, dynamic> partialData) {
+  Future<void> update(String key, Map<String, dynamic> partialData) async {
     final existing = _cache[key];
     if (existing is Map) {
       final Map<String, dynamic> updatedMap = {...existing, ...partialData};
       _cache[key] = updatedMap;
       final db = _db;
-      if (db != null) _store.record(key).put(db, updatedMap);
+      if (db != null) await _store.record(key).put(db, updatedMap);
     } else {
-      save(key, partialData);
+      await save(key, partialData);
     }
   }
 
@@ -141,13 +147,13 @@ class Engine {
   ///
   /// Example:
   /// ```dart
-  /// engine.delete('temporary_data');
+  /// await engine.delete('temporary_data');
   /// // Key-value pair is removed from both cache and database
   /// ```
-  void delete(String key) {
+  Future<void> delete(String key) async {
     _cache.remove(key);
     final db = _db;
-    if (db != null) _store.record(key).delete(db);
+    if (db != null) await _store.record(key).delete(db);
   }
 
   /// Clears all values from both cache and persistent storage
@@ -159,12 +165,12 @@ class Engine {
   ///
   /// Example:
   /// ```dart
-  /// engine.clearAll();
+  /// await engine.clearAll();
   /// // All data is removed from both cache and database
   /// ```
-  void clearAll() {
+  Future<void> clearAll() async {
     _cache.clear();
     final db = _db;
-    if (db != null) _store.delete(db);
+    if (db != null) await _store.delete(db);
   }
 }

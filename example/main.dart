@@ -120,13 +120,13 @@ class _BingoDashboardState extends State<BingoDashboard> {
                   const SizedBox(height: 20),
                   _neonButton(
                     text: "GENERATE & MARK USER",
-                    onTap: () {
+                    onTap: () async {
                       if (_uKeyCtrl.text.isEmpty) {
                         _log("⚠️ Error: Storage Key is required.");
                         return;
                       }
                       final user = User(id: _uIdCtrl.text, name: _uNameCtrl.text, email: _uEmailCtrl.text);
-                      Bingo.mark(_uKeyCtrl.text, user);
+                      await Bingo.mark(_uKeyCtrl.text, user);
                       _log("👤 User '${user.name}' marked at key '${_uKeyCtrl.text}'");
                       _uKeyCtrl.clear();
                       _uIdCtrl.clear();
@@ -152,8 +152,8 @@ class _BingoDashboardState extends State<BingoDashboard> {
                       Expanded(
                         child: _neonButton(
                           text: "SAVE SETTINGS",
-                          onTap: () {
-                            Bingo.mark('settings', {'theme': 'light'});
+                          onTap: () async {
+                            await Bingo.mark('settings', {'theme': 'light'});
                             _log("⚙️ Settings saved (theme: light)");
                             setState(() {});
                           },
@@ -164,8 +164,8 @@ class _BingoDashboardState extends State<BingoDashboard> {
                         child: _neonButton(
                           text: "MERGE LANG",
                           color: Colors.amber,
-                          onTap: () {
-                            Bingo.mark('settings', {'lang': 'en'});
+                          onTap: () async {
+                            await Bingo.mark('settings', {'lang': 'en'});
                             _log("🔀 Merged lang: en (theme kept)");
                             setState(() {});
                           },
@@ -177,8 +177,8 @@ class _BingoDashboardState extends State<BingoDashboard> {
                   _neonButton(
                     text: "OVERWRITE (MERGE: FALSE)",
                     color: Colors.purpleAccent,
-                    onTap: () {
-                      Bingo.mark('settings', {'theme': 'dark'}, merge: false);
+                    onTap: () async {
+                      await Bingo.mark('settings', {'theme': 'dark'}, merge: false);
                       _log("💜 Settings overwritten (lang lost)");
                       setState(() {});
                     },
@@ -241,9 +241,9 @@ class _BingoDashboardState extends State<BingoDashboard> {
                         child: _neonButton(
                           text: "ERASE KEY",
                           color: Colors.redAccent,
-                          onTap: () {
+                          onTap: () async {
                             if (_deleteCtrl.text.isNotEmpty) {
-                              Bingo.erase(_deleteCtrl.text);
+                              await Bingo.erase(_deleteCtrl.text);
                               _log("🗑️ Erased key: ${_deleteCtrl.text}");
                               _deleteCtrl.clear();
                               _fetchData(); // Update retrieval if current key was deleted
@@ -256,8 +256,8 @@ class _BingoDashboardState extends State<BingoDashboard> {
                         child: _neonButton(
                           text: "CLEAR ALL",
                           color: Colors.orangeAccent,
-                          onTap: () {
-                            Bingo.clear();
+                          onTap: () async {
+                            await Bingo.clear();
                             _log("☢️ DATABASE WIPED");
                             _fetchData();
                             setState(() {});
